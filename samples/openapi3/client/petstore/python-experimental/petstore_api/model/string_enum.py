@@ -63,14 +63,20 @@ class StringEnum(ModelSimple):
     validations = {
     }
 
-    additional_properties_type = None
+    @cached_property
+    def additional_properties_type():
+        """
+        This must be a method so a model may have properties that are
+        of type self, this ensures that we don't create a cyclic import
+        """
+        return None
 
     _nullable = True
 
     @cached_property
     def openapi_types():
         """
-        This must be a class method so a model may have properties that are
+        This must be a method so a model may have properties that are
         of type self, this ensures that we don't create a cyclic import
 
         Returns
@@ -84,6 +90,7 @@ class StringEnum(ModelSimple):
     @cached_property
     def discriminator():
         return None
+
 
     attribute_map = {}
 
@@ -100,7 +107,7 @@ class StringEnum(ModelSimple):
 
     @convert_js_args_to_python_args
     def __init__(self, value, *args, **kwargs):
-        """string_enum.StringEnum - a model defined in OpenAPI
+        """StringEnum - a model defined in OpenAPI
 
         Args:
             value (str):, must be one of ["placed", "approved", "delivered", ]  # noqa: E501

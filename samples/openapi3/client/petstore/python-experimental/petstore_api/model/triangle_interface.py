@@ -61,14 +61,20 @@ class TriangleInterface(ModelNormal):
     validations = {
     }
 
-    additional_properties_type = None
+    @cached_property
+    def additional_properties_type():
+        """
+        This must be a method so a model may have properties that are
+        of type self, this ensures that we don't create a cyclic import
+        """
+        return None
 
     _nullable = False
 
     @cached_property
     def openapi_types():
         """
-        This must be a class method so a model may have properties that are
+        This must be a method so a model may have properties that are
         of type self, this ensures that we don't create a cyclic import
 
         Returns
@@ -82,6 +88,7 @@ class TriangleInterface(ModelNormal):
     @cached_property
     def discriminator():
         return None
+
 
     attribute_map = {
         'triangle_type': 'triangleType',  # noqa: E501
@@ -100,7 +107,7 @@ class TriangleInterface(ModelNormal):
 
     @convert_js_args_to_python_args
     def __init__(self, triangle_type, *args, **kwargs):  # noqa: E501
-        """triangle_interface.TriangleInterface - a model defined in OpenAPI
+        """TriangleInterface - a model defined in OpenAPI
 
         Args:
             triangle_type (str):

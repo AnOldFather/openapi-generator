@@ -61,14 +61,20 @@ class HasOnlyReadOnly(ModelNormal):
     validations = {
     }
 
-    additional_properties_type = None
+    @cached_property
+    def additional_properties_type():
+        """
+        This must be a method so a model may have properties that are
+        of type self, this ensures that we don't create a cyclic import
+        """
+        return None
 
     _nullable = False
 
     @cached_property
     def openapi_types():
         """
-        This must be a class method so a model may have properties that are
+        This must be a method so a model may have properties that are
         of type self, this ensures that we don't create a cyclic import
 
         Returns
@@ -83,6 +89,7 @@ class HasOnlyReadOnly(ModelNormal):
     @cached_property
     def discriminator():
         return None
+
 
     attribute_map = {
         'bar': 'bar',  # noqa: E501
@@ -102,7 +109,7 @@ class HasOnlyReadOnly(ModelNormal):
 
     @convert_js_args_to_python_args
     def __init__(self, *args, **kwargs):  # noqa: E501
-        """has_only_read_only.HasOnlyReadOnly - a model defined in OpenAPI
+        """HasOnlyReadOnly - a model defined in OpenAPI
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types

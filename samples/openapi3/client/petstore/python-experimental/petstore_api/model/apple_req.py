@@ -61,14 +61,20 @@ class AppleReq(ModelNormal):
     validations = {
     }
 
-    additional_properties_type = None
+    @cached_property
+    def additional_properties_type():
+        """
+        This must be a method so a model may have properties that are
+        of type self, this ensures that we don't create a cyclic import
+        """
+        return None
 
     _nullable = False
 
     @cached_property
     def openapi_types():
         """
-        This must be a class method so a model may have properties that are
+        This must be a method so a model may have properties that are
         of type self, this ensures that we don't create a cyclic import
 
         Returns
@@ -83,6 +89,7 @@ class AppleReq(ModelNormal):
     @cached_property
     def discriminator():
         return None
+
 
     attribute_map = {
         'cultivar': 'cultivar',  # noqa: E501
@@ -102,7 +109,7 @@ class AppleReq(ModelNormal):
 
     @convert_js_args_to_python_args
     def __init__(self, cultivar, *args, **kwargs):  # noqa: E501
-        """apple_req.AppleReq - a model defined in OpenAPI
+        """AppleReq - a model defined in OpenAPI
 
         Args:
             cultivar (str):

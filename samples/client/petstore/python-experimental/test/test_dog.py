@@ -10,6 +10,7 @@
 """
 
 
+from __future__ import absolute_import
 import sys
 import unittest
 
@@ -85,7 +86,7 @@ class TestDog(unittest.TestCase):
         with self.assertRaises(AttributeError):
             invalid_variable = dog['invalid_variable']
         # with getattr
-        self.assertEqual(getattr(dog, 'invalid_variable', 'some value'), 'some value')
+        self.assertEquals(getattr(dog, 'invalid_variable', 'some value'), 'some value')
 
         with self.assertRaises(AttributeError):
             invalid_variable = getattr(dog, 'invalid_variable')

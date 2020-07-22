@@ -10,6 +10,7 @@
 """
 
 
+from __future__ import absolute_import
 import sys
 import unittest
 
@@ -88,7 +89,7 @@ class TestChild(unittest.TestCase):
         with self.assertRaises(petstore_api.ApiAttributeError):
             invalid_variable = child['invalid_variable']
         # with getattr
-        self.assertEqual(getattr(child, 'invalid_variable', 'some value'), 'some value')
+        self.assertEquals(getattr(child, 'invalid_variable', 'some value'), 'some value')
 
         with self.assertRaises(petstore_api.ApiAttributeError):
             invalid_variable = getattr(child, 'invalid_variable')

@@ -29,31 +29,18 @@ from petstore_api.model_utils import (  # noqa: F401
     none_type,
     validate_get_composed_info,
 )
-try:
-    from petstore_api.model import integer_enum
-except ImportError:
-    integer_enum = sys.modules[
-        'petstore_api.model.integer_enum']
-try:
-    from petstore_api.model import integer_enum_one_value
-except ImportError:
-    integer_enum_one_value = sys.modules[
-        'petstore_api.model.integer_enum_one_value']
-try:
-    from petstore_api.model import integer_enum_with_default_value
-except ImportError:
-    integer_enum_with_default_value = sys.modules[
-        'petstore_api.model.integer_enum_with_default_value']
-try:
-    from petstore_api.model import string_enum
-except ImportError:
-    string_enum = sys.modules[
-        'petstore_api.model.string_enum']
-try:
-    from petstore_api.model import string_enum_with_default_value
-except ImportError:
-    string_enum_with_default_value = sys.modules[
-        'petstore_api.model.string_enum_with_default_value']
+
+def lazy_import():
+    from petstore_api.model.integer_enum import IntegerEnum
+    from petstore_api.model.integer_enum_one_value import IntegerEnumOneValue
+    from petstore_api.model.integer_enum_with_default_value import IntegerEnumWithDefaultValue
+    from petstore_api.model.string_enum import StringEnum
+    from petstore_api.model.string_enum_with_default_value import StringEnumWithDefaultValue
+    globals()['IntegerEnum'] = IntegerEnum
+    globals()['IntegerEnumOneValue'] = IntegerEnumOneValue
+    globals()['IntegerEnumWithDefaultValue'] = IntegerEnumWithDefaultValue
+    globals()['StringEnum'] = StringEnum
+    globals()['StringEnumWithDefaultValue'] = StringEnumWithDefaultValue
 
 
 class EnumTest(ModelNormal):
@@ -104,35 +91,44 @@ class EnumTest(ModelNormal):
     validations = {
     }
 
-    additional_properties_type = None
+    @cached_property
+    def additional_properties_type():
+        """
+        This must be a method so a model may have properties that are
+        of type self, this ensures that we don't create a cyclic import
+        """
+        lazy_import()
+        return None
 
     _nullable = False
 
     @cached_property
     def openapi_types():
         """
-        This must be a class method so a model may have properties that are
+        This must be a method so a model may have properties that are
         of type self, this ensures that we don't create a cyclic import
 
         Returns
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
+        lazy_import()
         return {
             'enum_string_required': (str,),  # noqa: E501
             'enum_string': (str,),  # noqa: E501
             'enum_integer': (int,),  # noqa: E501
             'enum_number': (float,),  # noqa: E501
-            'string_enum': (string_enum.StringEnum, none_type,),  # noqa: E501
-            'integer_enum': (integer_enum.IntegerEnum,),  # noqa: E501
-            'string_enum_with_default_value': (string_enum_with_default_value.StringEnumWithDefaultValue,),  # noqa: E501
-            'integer_enum_with_default_value': (integer_enum_with_default_value.IntegerEnumWithDefaultValue,),  # noqa: E501
-            'integer_enum_one_value': (integer_enum_one_value.IntegerEnumOneValue,),  # noqa: E501
+            'string_enum': (StringEnum, none_type,),  # noqa: E501
+            'integer_enum': (IntegerEnum,),  # noqa: E501
+            'string_enum_with_default_value': (StringEnumWithDefaultValue,),  # noqa: E501
+            'integer_enum_with_default_value': (IntegerEnumWithDefaultValue,),  # noqa: E501
+            'integer_enum_one_value': (IntegerEnumOneValue,),  # noqa: E501
         }
 
     @cached_property
     def discriminator():
         return None
+
 
     attribute_map = {
         'enum_string_required': 'enum_string_required',  # noqa: E501
@@ -159,7 +155,7 @@ class EnumTest(ModelNormal):
 
     @convert_js_args_to_python_args
     def __init__(self, enum_string_required, *args, **kwargs):  # noqa: E501
-        """enum_test.EnumTest - a model defined in OpenAPI
+        """EnumTest - a model defined in OpenAPI
 
         Args:
             enum_string_required (str):
@@ -198,11 +194,11 @@ class EnumTest(ModelNormal):
             enum_string (str): [optional]  # noqa: E501
             enum_integer (int): [optional]  # noqa: E501
             enum_number (float): [optional]  # noqa: E501
-            string_enum (string_enum.StringEnum, none_type): [optional]  # noqa: E501
-            integer_enum (integer_enum.IntegerEnum): [optional]  # noqa: E501
-            string_enum_with_default_value (string_enum_with_default_value.StringEnumWithDefaultValue): [optional]  # noqa: E501
-            integer_enum_with_default_value (integer_enum_with_default_value.IntegerEnumWithDefaultValue): [optional]  # noqa: E501
-            integer_enum_one_value (integer_enum_one_value.IntegerEnumOneValue): [optional]  # noqa: E501
+            string_enum (StringEnum, none_type): [optional]  # noqa: E501
+            integer_enum (IntegerEnum): [optional]  # noqa: E501
+            string_enum_with_default_value (StringEnumWithDefaultValue): [optional]  # noqa: E501
+            integer_enum_with_default_value (IntegerEnumWithDefaultValue): [optional]  # noqa: E501
+            integer_enum_one_value (IntegerEnumOneValue): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

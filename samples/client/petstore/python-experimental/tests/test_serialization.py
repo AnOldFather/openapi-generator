@@ -15,6 +15,8 @@ import time
 import unittest
 import datetime
 
+import six
+
 import petstore_api
 
 from petstore_api.exceptions import (
@@ -35,7 +37,9 @@ from petstore_api.model import (
 )
 from petstore_api.model_utils import (
     file_type,
+    int,
     model_to_dict,
+    str,
 )
 
 from petstore_api.rest import RESTResponse

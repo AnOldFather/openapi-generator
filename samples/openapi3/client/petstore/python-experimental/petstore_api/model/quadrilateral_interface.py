@@ -61,14 +61,20 @@ class QuadrilateralInterface(ModelNormal):
     validations = {
     }
 
-    additional_properties_type = None
+    @cached_property
+    def additional_properties_type():
+        """
+        This must be a method so a model may have properties that are
+        of type self, this ensures that we don't create a cyclic import
+        """
+        return None
 
     _nullable = False
 
     @cached_property
     def openapi_types():
         """
-        This must be a class method so a model may have properties that are
+        This must be a method so a model may have properties that are
         of type self, this ensures that we don't create a cyclic import
 
         Returns
@@ -82,6 +88,7 @@ class QuadrilateralInterface(ModelNormal):
     @cached_property
     def discriminator():
         return None
+
 
     attribute_map = {
         'quadrilateral_type': 'quadrilateralType',  # noqa: E501
@@ -100,7 +107,7 @@ class QuadrilateralInterface(ModelNormal):
 
     @convert_js_args_to_python_args
     def __init__(self, quadrilateral_type, *args, **kwargs):  # noqa: E501
-        """quadrilateral_interface.QuadrilateralInterface - a model defined in OpenAPI
+        """QuadrilateralInterface - a model defined in OpenAPI
 
         Args:
             quadrilateral_type (str):

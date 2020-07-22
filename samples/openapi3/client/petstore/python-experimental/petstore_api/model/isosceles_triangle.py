@@ -29,16 +29,12 @@ from petstore_api.model_utils import (  # noqa: F401
     none_type,
     validate_get_composed_info,
 )
-try:
-    from petstore_api.model import shape_interface
-except ImportError:
-    shape_interface = sys.modules[
-        'petstore_api.model.shape_interface']
-try:
-    from petstore_api.model import triangle_interface
-except ImportError:
-    triangle_interface = sys.modules[
-        'petstore_api.model.triangle_interface']
+
+def lazy_import():
+    from petstore_api.model.shape_interface import ShapeInterface
+    from petstore_api.model.triangle_interface import TriangleInterface
+    globals()['ShapeInterface'] = ShapeInterface
+    globals()['TriangleInterface'] = TriangleInterface
 
 
 class IsoscelesTriangle(ModelComposed):
@@ -71,20 +67,28 @@ class IsoscelesTriangle(ModelComposed):
     validations = {
     }
 
-    additional_properties_type = None
+    @cached_property
+    def additional_properties_type():
+        """
+        This must be a method so a model may have properties that are
+        of type self, this ensures that we don't create a cyclic import
+        """
+        lazy_import()
+        return None
 
     _nullable = False
 
     @cached_property
     def openapi_types():
         """
-        This must be a class method so a model may have properties that are
+        This must be a method so a model may have properties that are
         of type self, this ensures that we don't create a cyclic import
 
         Returns
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
+        lazy_import()
         return {
             'shape_type': (str,),  # noqa: E501
             'triangle_type': (str,),  # noqa: E501
@@ -93,6 +97,7 @@ class IsoscelesTriangle(ModelComposed):
     @cached_property
     def discriminator():
         return None
+
 
     attribute_map = {
         'shape_type': 'shapeType',  # noqa: E501
@@ -113,7 +118,7 @@ class IsoscelesTriangle(ModelComposed):
 
     @convert_js_args_to_python_args
     def __init__(self, shape_type, triangle_type, *args, **kwargs):  # noqa: E501
-        """isosceles_triangle.IsoscelesTriangle - a model defined in OpenAPI
+        """IsoscelesTriangle - a model defined in OpenAPI
 
         Args:
             shape_type (str):
@@ -221,12 +226,13 @@ class IsoscelesTriangle(ModelComposed):
         # code would be run when this module is imported, and these composed
         # classes don't exist yet because their module has not finished
         # loading
+        lazy_import()
         return {
           'anyOf': [
           ],
           'allOf': [
-              shape_interface.ShapeInterface,
-              triangle_interface.TriangleInterface,
+              ShapeInterface,
+              TriangleInterface,
           ],
           'oneOf': [
           ],

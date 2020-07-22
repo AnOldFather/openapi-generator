@@ -29,11 +29,10 @@ from petstore_api.model_utils import (  # noqa: F401
     none_type,
     validate_get_composed_info,
 )
-try:
-    from petstore_api.model import string_enum
-except ImportError:
-    string_enum = sys.modules[
-        'petstore_api.model.string_enum']
+
+def lazy_import():
+    from petstore_api.model.string_enum import StringEnum
+    globals()['StringEnum'] = StringEnum
 
 
 class ArrayOfEnums(ModelSimple):
@@ -62,27 +61,36 @@ class ArrayOfEnums(ModelSimple):
     validations = {
     }
 
-    additional_properties_type = None
+    @cached_property
+    def additional_properties_type():
+        """
+        This must be a method so a model may have properties that are
+        of type self, this ensures that we don't create a cyclic import
+        """
+        lazy_import()
+        return None
 
     _nullable = False
 
     @cached_property
     def openapi_types():
         """
-        This must be a class method so a model may have properties that are
+        This must be a method so a model may have properties that are
         of type self, this ensures that we don't create a cyclic import
 
         Returns
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
+        lazy_import()
         return {
-            'value': ([string_enum.StringEnum, none_type],),
+            'value': ([StringEnum, none_type],),
         }
 
     @cached_property
     def discriminator():
         return None
+
 
     attribute_map = {}
 
@@ -99,10 +107,10 @@ class ArrayOfEnums(ModelSimple):
 
     @convert_js_args_to_python_args
     def __init__(self, value, *args, **kwargs):
-        """array_of_enums.ArrayOfEnums - a model defined in OpenAPI
+        """ArrayOfEnums - a model defined in OpenAPI
 
         Args:
-            value ([string_enum.StringEnum, none_type]):  # noqa: E501
+            value ([StringEnum, none_type]):  # noqa: E501
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types

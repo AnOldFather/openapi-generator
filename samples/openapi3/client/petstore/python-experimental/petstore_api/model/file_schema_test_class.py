@@ -29,11 +29,10 @@ from petstore_api.model_utils import (  # noqa: F401
     none_type,
     validate_get_composed_info,
 )
-try:
-    from petstore_api.model import file
-except ImportError:
-    file = sys.modules[
-        'petstore_api.model.file']
+
+def lazy_import():
+    from petstore_api.model.file import File
+    globals()['File'] = File
 
 
 class FileSchemaTestClass(ModelNormal):
@@ -66,28 +65,37 @@ class FileSchemaTestClass(ModelNormal):
     validations = {
     }
 
-    additional_properties_type = None
+    @cached_property
+    def additional_properties_type():
+        """
+        This must be a method so a model may have properties that are
+        of type self, this ensures that we don't create a cyclic import
+        """
+        lazy_import()
+        return None
 
     _nullable = False
 
     @cached_property
     def openapi_types():
         """
-        This must be a class method so a model may have properties that are
+        This must be a method so a model may have properties that are
         of type self, this ensures that we don't create a cyclic import
 
         Returns
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
+        lazy_import()
         return {
-            'file': (file.File,),  # noqa: E501
-            'files': ([file.File],),  # noqa: E501
+            'file': (File,),  # noqa: E501
+            'files': ([File],),  # noqa: E501
         }
 
     @cached_property
     def discriminator():
         return None
+
 
     attribute_map = {
         'file': 'file',  # noqa: E501
@@ -107,7 +115,7 @@ class FileSchemaTestClass(ModelNormal):
 
     @convert_js_args_to_python_args
     def __init__(self, *args, **kwargs):  # noqa: E501
-        """file_schema_test_class.FileSchemaTestClass - a model defined in OpenAPI
+        """FileSchemaTestClass - a model defined in OpenAPI
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -140,8 +148,8 @@ class FileSchemaTestClass(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            file (file.File): [optional]  # noqa: E501
-            files ([file.File]): [optional]  # noqa: E501
+            file (File): [optional]  # noqa: E501
+            files ([File]): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
